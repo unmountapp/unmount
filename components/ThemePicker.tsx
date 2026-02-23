@@ -6,107 +6,13 @@ import {
   ScrollView,
   StyleSheet,
 } from 'react-native';
+import { MOUNTAIN_THEMES, MountainTheme, MountainThemeId } from '../app/storage';
 import { COLORS } from '../utils/theme';
-
-export interface MountainTheme {
-  id: string;
-  name: string;
-  emoji: string;
-  isPro: boolean;
-  colors: {
-    mountainBase: string;
-    mountainMid: string;
-    mountainPeak: string;
-    snow: string;
-    sky: string;
-  };
-}
-
-export const MOUNTAIN_THEMES: MountainTheme[] = [
-  {
-    id: 'stone',
-    name: 'Stone Peak',
-    emoji: '⛰️',
-    isPro: false,
-    colors: {
-      mountainBase: '#4a4a5e',
-      mountainMid: '#5a5a72',
-      mountainPeak: '#8a8aaa',
-      snow: '#e8e8f0',
-      sky: '#1a1a2e',
-    },
-  },
-  {
-    id: 'volcano',
-    name: 'Volcano',
-    emoji: '🌋',
-    isPro: true,
-    colors: {
-      mountainBase: '#3d1515',
-      mountainMid: '#8b2020',
-      mountainPeak: '#c0392b',
-      snow: '#ff6b35',
-      sky: '#1a0a0a',
-    },
-  },
-  {
-    id: 'glacier',
-    name: 'Glacier',
-    emoji: '🧊',
-    isPro: true,
-    colors: {
-      mountainBase: '#1a3a4a',
-      mountainMid: '#2a5a7a',
-      mountainPeak: '#5ab4d8',
-      snow: '#e8f8ff',
-      sky: '#0a1a2a',
-    },
-  },
-  {
-    id: 'canyon',
-    name: 'Canyon',
-    emoji: '🏜️',
-    isPro: true,
-    colors: {
-      mountainBase: '#5c2a0a',
-      mountainMid: '#8b4513',
-      mountainPeak: '#d2691e',
-      snow: '#f4a460',
-      sky: '#1a0f05',
-    },
-  },
-  {
-    id: 'sanddune',
-    name: 'Sand Dune',
-    emoji: '🏜️',
-    isPro: true,
-    colors: {
-      mountainBase: '#4a3a1a',
-      mountainMid: '#8b7355',
-      mountainPeak: '#c8a96e',
-      snow: '#f5deb3',
-      sky: '#1a1205',
-    },
-  },
-  {
-    id: 'crystal',
-    name: 'Crystal',
-    emoji: '💎',
-    isPro: true,
-    colors: {
-      mountainBase: '#1a0a3a',
-      mountainMid: '#4a1a8a',
-      mountainPeak: '#9b59b6',
-      snow: '#d8b4fe',
-      sky: '#0d0021',
-    },
-  },
-];
 
 interface ThemePickerProps {
   currentThemeId: string;
   isPro: boolean;
-  onSelect: (themeId: string) => void;
+  onSelect: (themeId: MountainThemeId) => void;
   onUpgrade: () => void;
 }
 
@@ -127,49 +33,51 @@ export function ThemePicker({
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Mountain Theme</Text>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        <View style={styles.themeRow}>
-          {MOUNTAIN_THEMES.map((theme) => {
-            const isSelected = currentThemeId === theme.id;
-            const isLocked = theme.isPro && !isPro;
-            return (
-              <TouchableOpacity
-                key={theme.id}
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.themeRow}
+      >
+        {MOUNTAIN_THEMES.map((theme) => {
+          const isSelected = currentThemeId === theme.id;
+          const isLocked = theme.isPro && !isPro;
+          return (
+            <TouchableOpacity
+              key={theme.id}
+              style={styles.themeCard}
+              onPress={() => handleSelect(theme)}
+              activeOpacity={0.8}
+            >
+              <View
                 style={[
-                  styles.themeCard,
-                  isSelected && styles.themeCardSelected,
+                  styles.colorPreview,
+                  {
+                    backgroundColor: theme.colors.base,
+                    borderColor: isSelected ? COLORS.primary : 'transparent',
+                  },
                 ]}
-                onPress={() => handleSelect(theme)}
-                activeOpacity={0.8}
               >
-                <View
-                  style={[
-                    styles.colorPreview,
-                    { backgroundColor: theme.colors.mountainMid },
-                  ]}
-                >
-                  <Text style={styles.themeEmoji}>{theme.emoji}</Text>
-                  {isLocked && (
-                    <View style={styles.lockOverlay}>
-                      <Text style={styles.lockIcon}>🔒</Text>
-                    </View>
-                  )}
-                </View>
-                <Text
-                  style={[
-                    styles.themeName,
-                    isSelected && styles.themeNameSelected,
-                  ]}
-                >
-                  {theme.name}
-                </Text>
-                {theme.isPro && (
-                  <Text style={styles.proTag}>PRO</Text>
+                <Text style={styles.themeEmoji}>{theme.emoji}</Text>
+                {isLocked && (
+                  <View style={styles.lockOverlay}>
+                    <Text style={styles.lockIcon}>🔒</Text>
+                  </View>
                 )}
-              </TouchableOpacity>
-            );
-          })}
-        </View>
+              </View>
+              <Text
+                style={[
+                  styles.themeName,
+                  isSelected && styles.themeNameSelected,
+                ]}
+              >
+                {theme.name}
+              </Text>
+              {theme.isPro && (
+                <Text style={styles.proTag}>PRO</Text>
+              )}
+            </TouchableOpacity>
+          );
+        })}
       </ScrollView>
     </View>
   );
@@ -195,9 +103,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: 80,
   },
-  themeCardSelected: {
-    opacity: 1,
-  },
   colorPreview: {
     width: 60,
     height: 60,
@@ -206,7 +111,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 2,
-    borderColor: 'transparent',
     overflow: 'hidden',
   },
   themeEmoji: {
