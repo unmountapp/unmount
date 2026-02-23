@@ -32,7 +32,24 @@ export const colors = {
   },
 } as const;
 
+// Flat COLORS object for components that import { COLORS }
+export const COLORS = {
+  background: "#0c1220",
+  surface: "#162032",
+  surfaceElevated: "#1a2744",
+  text: "#f1f5f9",
+  textSecondary: "#94a3b8",
+  textMuted: "#64748b",
+  primary: "#4abb87",
+  primaryLight: "#64dca0",
+  success: "#4abb87",
+  warning: "#fbbf24",
+  danger: "#f87171",
+  border: "rgba(255,255,255,0.08)",
+  borderStrong: "rgba(255,255,255,0.15)",
+} as const;
+
 export const fonts = {
-  display: "System", // Replace with custom font if you add one via expo-font
+  display: "System",
   body: "System",
 } as const;
