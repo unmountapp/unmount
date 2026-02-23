@@ -8,14 +8,15 @@ import Animated, {
   withRepeat,
   Easing,
 } from "react-native-reanimated";
+import { MountainData } from "../app/storage";
 import { colors } from "../utils/theme";
 
 interface VictoryScreenProps {
-  habit: string;
-  onReset: () => void;
+  mountain: MountainData;
+  onContinue: () => void;
 }
 
-export function VictoryScreen({ habit, onReset }: VictoryScreenProps) {
+export function VictoryScreen({ mountain, onContinue }: VictoryScreenProps) {
   const scale = useSharedValue(0.9);
   const opacity = useSharedValue(0);
   const floatY = useSharedValue(0);
@@ -45,22 +46,22 @@ export function VictoryScreen({ habit, onReset }: VictoryScreenProps) {
   return (
     <View style={styles.container}>
       <Animated.View style={[styles.content, containerStyle]}>
-        <Animated.Text style={[styles.emoji, emojiStyle]}>🏔️</Animated.Text>
+        <Animated.Text style={[styles.emoji, emojiStyle]}>⛰️</Animated.Text>
         <Text style={styles.title}>Mountain Conquered</Text>
         <Text style={styles.body}>
           You broke through{" "}
-          <Text style={styles.habitName}>{habit}</Text>. 66 clean days. The
-          mountain is dust.
+          <Text style={styles.habitName}>{mountain.habitName}</Text>. 66 clean
+          days. The mountain is dust.
         </Text>
         <Text style={styles.tagline}>
           The habit no longer controls you.
         </Text>
         <TouchableOpacity
           style={styles.button}
-          onPress={onReset}
-          activeOpacity={0.7}
+          onPress={onContinue}
+          activeOpacity={0.85}
         >
-          <Text style={styles.buttonText}>Start a New Challenge</Text>
+          <Text style={styles.buttonText}>View Trophy Room →</Text>
         </TouchableOpacity>
       </Animated.View>
     </View>
@@ -70,6 +71,7 @@ export function VictoryScreen({ habit, onReset }: VictoryScreenProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: colors.background,
     justifyContent: "center",
     alignItems: "center",
     padding: 32,
@@ -78,44 +80,50 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   emoji: {
-    fontSize: 72,
-    marginBottom: 16,
+    fontSize: 80,
+    marginBottom: 24,
   },
   title: {
-    fontSize: 34,
-    fontWeight: "700",
-    color: colors.accent.greenLight,
-    marginBottom: 8,
+    fontSize: 32,
+    fontWeight: "800",
+    color: colors.text.primary,
     textAlign: "center",
+    marginBottom: 16,
+    textTransform: "uppercase",
+    letterSpacing: 2,
   },
   body: {
+    fontSize: 18,
     color: colors.text.secondary,
-    fontSize: 16,
     textAlign: "center",
-    maxWidth: 320,
-    lineHeight: 24,
+    lineHeight: 26,
     marginBottom: 12,
   },
   habitName: {
-    color: colors.text.primary,
+    color: colors.accent.green,
     fontWeight: "700",
   },
   tagline: {
-    fontSize: 13,
+    fontSize: 14,
     color: colors.text.muted,
-    marginBottom: 32,
+    textAlign: "center",
+    marginBottom: 40,
+    fontStyle: "italic",
   },
   button: {
-    paddingVertical: 14,
+    backgroundColor: colors.accent.green,
     paddingHorizontal: 32,
-    backgroundColor: "rgba(255,255,255,0.06)",
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.1)",
-    borderRadius: 12,
+    paddingVertical: 16,
+    borderRadius: 14,
+    shadowColor: colors.accent.green,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.4,
+    shadowRadius: 10,
+    elevation: 6,
   },
   buttonText: {
-    fontSize: 15,
-    fontWeight: "600",
-    color: colors.text.secondary,
+    color: "#fff",
+    fontSize: 17,
+    fontWeight: "700",
   },
 });
