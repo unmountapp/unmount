@@ -12,10 +12,8 @@ export function useMountainData() {
       storage.getActiveMountainId(),
       storage.getProStatus()
     ]);
-
     setAllMountains(mountains);
     setProStatus(isPro);
-
     if (activeId) {
       const active = mountains.find(m => m.id === activeId);
       setCurrentMountain(active || mountains[0] || null);
@@ -28,8 +26,8 @@ export function useMountainData() {
     loadData();
   }, [loadData]);
 
-  const addMountain = async (habit: string, themeId: storage.MountainThemeId = 'classic') => {
-    const newMountain = storage.createMountain(habit, themeId);
+  const addMountain = async (habitName: string, themeId: storage.MountainThemeId = 'classic') => {
+    const newMountain = storage.createMountain(habitName, themeId);
     await storage.addMountain(newMountain);
     await loadData();
   };
@@ -41,6 +39,11 @@ export function useMountainData() {
 
   const deleteMountain = async (id: string) => {
     await storage.deleteMountain(id);
+    await loadData();
+  };
+
+  const switchMountain = async (id: string) => {
+    await storage.setActiveMountainId(id);
     await loadData();
   };
 
@@ -56,6 +59,7 @@ export function useMountainData() {
     addMountain,
     updateMountain,
     deleteMountain,
+    switchMountain,
     refreshProStatus,
     reload: loadData
   };
