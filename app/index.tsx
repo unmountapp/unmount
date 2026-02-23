@@ -23,6 +23,7 @@ import { AnalyticsScreen } from '../components/AnalyticsScreen';
 import { TrophyRoom } from '../components/TrophyRoom';
 import { ThemePicker } from '../components/ThemePicker';
 import { COLORS } from '../utils/theme';
+import { TOTAL_DAYS } from './storage';
 
 type Tab = 'home' | 'habits' | 'stats' | 'trophies';
 
@@ -37,7 +38,6 @@ export default function App() {
     switchMountain,
     refreshProStatus,
   } = useMountainData();
-
   const [activeTab, setActiveTab] = useState<Tab>('home');
   const [showPaywall, setShowPaywall] = useState(false);
   const [addingNew, setAddingNew] = useState(false);
@@ -66,20 +66,23 @@ export default function App() {
 
   const handleCleanDay = async () => {
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    const newCleanDays = currentMountain.cleanDays + 1;
+    const newDaysRemaining = Math.max(0, currentMountain.daysRemaining - 1);
+    const isNowVictory = newDaysRemaining <= 0;
+    const newStreak = currentMountain.currentStreak + 1;
     const updated = {
       ...currentMountain,
-      cleanDays: currentMountain.cleanDays + 1,
-      daysRemaining: Math.max(0, currentMountain.daysRemaining - 1),
+      cleanDays: newCleanDays,
+      daysRemaining: newDaysRemaining,
+      currentStreak: newStreak,
+      bestStreak: Math.max(currentMountain.bestStreak, newStreak),
       lastUpdated: new Date().toISOString(),
       log: [
         ...currentMountain.log,
         { date: new Date().toISOString(), type: 'clean' as const, timestamp: Date.now() },
       ],
-      isVictory: currentMountain.daysRemaining - 1 <= 0,
-      completedAt:
-        currentMountain.daysRemaining - 1 <= 0
-          ? new Date().toISOString()
-          : currentMountain.completedAt,
+      isVictory: isNowVictory,
+      completedAt: isNowVictory ? new Date().toISOString() : currentMountain.completedAt,
     };
     await updateMountain(updated);
   };
@@ -98,8 +101,9 @@ export default function App() {
             const updated = {
               ...currentMountain,
               cleanDays: Math.max(0, currentMountain.cleanDays - 1),
-              daysRemaining: Math.min(66, currentMountain.daysRemaining + 1),
+              daysRemaining: Math.min(TOTAL_DAYS, currentMountain.daysRemaining + 1),
               relapseCount: currentMountain.relapseCount + 1,
+              totalRelapses: currentMountain.totalRelapses + 1,
               currentStreak: 0,
               lastUpdated: new Date().toISOString(),
               log: [
@@ -147,26 +151,22 @@ export default function App() {
             <View style={styles.header}>
               <Text style={styles.habitName}>{currentMountain.habitName}</Text>
               <Text style={styles.dayCount}>
-                Day {currentMountain.cleanDays} of 66
+                Day {currentMountain.cleanDays} of {TOTAL_DAYS}
               </Text>
             </View>
-
             <Mountain
-              progress={currentMountain.cleanDays / 66}
-              themeId={currentMountain.themeId || 'stone'}
+              progress={currentMountain.cleanDays / TOTAL_DAYS}
+              themeId={currentMountain.themeId || 'classic'}
             />
-
             <StatsRow mountain={currentMountain} />
-
             <ThemePicker
-              currentThemeId={currentMountain.themeId || 'stone'}
+              currentThemeId={currentMountain.themeId || 'classic'}
               isPro={proStatus}
               onSelect={async (themeId) => {
                 await updateMountain({ ...currentMountain, themeId });
               }}
               onUpgrade={() => setShowPaywall(true)}
             />
-
             <View style={styles.actions}>
               <TouchableOpacity
                 style={[styles.button, styles.cleanButton]}
@@ -183,7 +183,6 @@ export default function App() {
                 <Text style={styles.relapseText}>I relapsed</Text>
               </TouchableOpacity>
             </View>
-
             <ActivityLog log={currentMountain.log} />
           </ScrollView>
         );
