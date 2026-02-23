@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { LogEntry } from "../utils/storage";
+import { LogEntry } from "../app/storage";
 import { colors } from "../utils/theme";
 
 interface ActivityLogProps {
@@ -39,7 +39,7 @@ export function ActivityLog({ log }: ActivityLogProps) {
                   { color: isClean ? colors.accent.greenLight : colors.accent.red },
                 ]}
               >
-                {isClean ? "✓" : "×"}
+                {isClean ? "✓" : "x"}
               </Text>
             </View>
           );
