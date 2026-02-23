@@ -1,10 +1,10 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { MountainData } from "../utils/storage";
+import { MountainData } from "../app/storage";
 import { colors } from "../utils/theme";
 
 interface StatsRowProps {
-  state: MountainData;
+  mountain: MountainData;
 }
 
 const stats = [
@@ -14,13 +14,13 @@ const stats = [
   { key: "totalRelapses", label: "Relapses", color: colors.accent.red },
 ] as const;
 
-export function StatsRow({ state }: StatsRowProps) {
+export function StatsRow({ mountain }: StatsRowProps) {
   return (
     <View style={styles.container}>
       {stats.map((stat) => (
         <View key={stat.key} style={styles.statItem}>
           <Text style={[styles.value, { color: stat.color }]}>
-            {state[stat.key]}
+            {mountain[stat.key]}
           </Text>
           <Text style={styles.label}>{stat.label}</Text>
         </View>
