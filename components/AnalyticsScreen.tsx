@@ -1,7 +1,7 @@
-import React from \"react\";
-import { View, Text, ScrollView, StyleSheet } from \"react-native\";
-import { MountainData, computeWeeklyStats, computeRelapsePatterns, TOTAL_DAYS } from \"../utils/storage\";
-import { colors } from \"../utils/theme\";
+import React from "react";
+import { View, Text, ScrollView, StyleSheet } from "react-native";
+import { MountainData, computeWeeklyStats, computeRelapsePatterns, TOTAL_DAYS } from "../app/storage";
+import { colors } from "../utils/theme";
 
 interface AnalyticsScreenProps {
   mountain: MountainData;
@@ -19,14 +19,15 @@ export function AnalyticsScreen({ mountain }: AnalyticsScreenProps) {
 
   const progress = Math.round((mountain.cleanDays / TOTAL_DAYS) * 100);
   const daysActive = mountain.log.length;
-  const successRate = daysActive > 0
-    ? Math.round((mountain.log.filter((e) => e.type === \"clean\").length / daysActive) * 100)
-    : 0;
+  const successRate =
+    daysActive > 0
+      ? Math.round((mountain.log.filter((e) => e.type === "clean").length / daysActive) * 100)
+      : 0;
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <Text style={styles.title}>Analytics</Text>
-      <Text style={styles.subtitle}>{mountain.habit}</Text>
+      <Text style={styles.subtitle}>{mountain.habitName}</Text>
 
       {/* Summary cards */}
       <View style={styles.summaryRow}>
@@ -60,7 +61,7 @@ export function AnalyticsScreen({ mountain }: AnalyticsScreenProps) {
                     style={[
                       styles.bar,
                       styles.barClean,
-                      { height: `${(week.cleanDays / maxWeekly) * 100}%` },
+                      { height: `${(week.cleanDays / maxWeekly) * 100}%` as any },
                     ]}
                   />
                 </View>
@@ -69,7 +70,7 @@ export function AnalyticsScreen({ mountain }: AnalyticsScreenProps) {
                     style={[
                       styles.bar,
                       styles.barRelapse,
-                      { height: `${(week.relapses / maxWeekly) * 100}%` },
+                      { height: `${(week.relapses / maxWeekly) * 100}%` as any },
                     ]}
                   />
                 </View>
@@ -104,13 +105,13 @@ export function AnalyticsScreen({ mountain }: AnalyticsScreenProps) {
                     style={[
                       styles.patternBar,
                       {
-                        height: Math.max(4, intensity * 60),
+                        height: Math.max(4, intensity * 80),
                         backgroundColor:
                           intensity > 0.6
                             ? colors.accent.red
                             : intensity > 0.3
-                            ? \"rgba(248,113,113,0.5)\"
-                            : \"rgba(248,113,113,0.15)\",
+                            ? "rgba(248,113,113,0.5)"
+                            : "rgba(248,113,113,0.15)",
                       },
                     ]}
                   />
@@ -130,7 +131,7 @@ export function AnalyticsScreen({ mountain }: AnalyticsScreenProps) {
         <Text style={styles.sectionTitle}>Journey Timeline</Text>
         <View style={styles.timeline}>
           {mountain.log.slice(-20).map((entry, i) => {
-            const isClean = entry.type === \"clean\";
+            const isClean = entry.type === "clean";
             return (
               <View key={i} style={styles.timelineRow}>
                 <View
@@ -142,21 +143,21 @@ export function AnalyticsScreen({ mountain }: AnalyticsScreenProps) {
                     },
                   ]}
                 >
-                  <Text style={{ fontSize: 10, color: isClean ? colors.accent.greenLight : colors.accent.red }}>
-                    {isClean ? \"✓\" : \"×\"}
+                  <Text style={{ color: isClean ? colors.accent.greenLight : colors.accent.red, fontSize: 10 }}>
+                    {isClean ? "✓" : "×"}
                   </Text>
                 </View>
                 {i < mountain.log.slice(-20).length - 1 && (
                   <View style={styles.timelineLine} />
                 )}
-                <Text style={styles.timelineDate}>{entry.date}</Text>
+                <Text style={styles.timelineDate}>{entry.date.slice(0, 10)}</Text>
                 <Text
                   style={[
                     styles.timelineType,
                     { color: isClean ? colors.accent.greenLight : colors.accent.red },
                   ]}
                 >
-                  {isClean ? \"Clean day\" : \"Relapse\"}
+                  {isClean ? "Clean day" : "Relapse"}
                 </Text>
               </View>
             );
@@ -172,7 +173,7 @@ const styles = StyleSheet.create({
   content: { padding: 20, paddingBottom: 40 },
   title: {
     fontSize: 24,
-    fontWeight: \"700\",
+    fontWeight: "700",
     color: colors.text.primary,
     marginBottom: 2,
   },
@@ -182,7 +183,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   summaryRow: {
-    flexDirection: \"row\",
+    flexDirection: "row",
     gap: 10,
     marginBottom: 28,
   },
@@ -191,29 +192,27 @@ const styles = StyleSheet.create({
     backgroundColor: colors.bg.card,
     borderRadius: 12,
     padding: 16,
-    alignItems: \"center\",
+    alignItems: "center",
     borderWidth: 1,
     borderColor: colors.bg.cardBorder,
   },
   summaryValue: {
     fontSize: 26,
-    fontWeight: \"700\",
+    fontWeight: "700",
     color: colors.text.primary,
     marginBottom: 4,
   },
   summaryLabel: {
     fontSize: 10,
     color: colors.text.muted,
-    textTransform: \"uppercase\",
+    textTransform: "uppercase",
     letterSpacing: 0.8,
-    fontWeight: \"600\",
+    fontWeight: "600",
   },
-  section: {
-    marginBottom: 28,
-  },
+  section: { marginBottom: 28 },
   sectionTitle: {
     fontSize: 16,
-    fontWeight: \"700\",
+    fontWeight: "700",
     color: colors.text.primary,
     marginBottom: 4,
   },
@@ -223,8 +222,8 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   chart: {
-    flexDirection: \"row\",
-    alignItems: \"flex-end\",
+    flexDirection: "row",
+    alignItems: "flex-end",
     height: 120,
     gap: 6,
     marginTop: 16,
@@ -232,114 +231,70 @@ const styles = StyleSheet.create({
   },
   barGroup: {
     flex: 1,
-    alignItems: \"center\",
-    height: \"100%\",
-    flexDirection: \"row\",
+    alignItems: "center",
+    height: "100%",
+    flexDirection: "row",
     gap: 2,
-    position: \"relative\",
+    position: "relative",
   },
   barContainer: {
     flex: 1,
-    height: \"100%\",
-    justifyContent: \"flex-end\",
+    height: "100%",
+    justifyContent: "flex-end",
   },
   bar: {
     borderRadius: 3,
     minHeight: 2,
   },
-  barClean: {
-    backgroundColor: colors.accent.green,
-  },
-  barRelapse: {
-    backgroundColor: colors.accent.red,
-  },
+  barClean: { backgroundColor: colors.accent.green },
+  barRelapse: { backgroundColor: colors.accent.red },
   barLabel: {
-    position: \"absolute\",
+    position: "absolute",
     bottom: -20,
     fontSize: 9,
     color: colors.text.dimmed,
-    width: \"100%\",
-    textAlign: \"center\",
+    width: "100%",
+    textAlign: "center",
   },
-  legendRow: {
-    flexDirection: \"row\",
-    gap: 16,
-    marginTop: 8,
-  },
-  legendItem: {
-    flexDirection: \"row\",
-    alignItems: \"center\",
-    gap: 6,
-  },
-  legendDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-  },
-  legendText: {
-    fontSize: 12,
-    color: colors.text.muted,
-  },
+  legendRow: { flexDirection: "row", gap: 16, marginTop: 8 },
+  legendItem: { flexDirection: "row", alignItems: "center", gap: 6 },
+  legendDot: { width: 8, height: 8, borderRadius: 4 },
+  legendText: { fontSize: 12, color: colors.text.muted },
   patternGrid: {
-    flexDirection: \"row\",
-    justifyContent: \"space-between\",
-    alignItems: \"flex-end\",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-end",
     height: 100,
     gap: 8,
   },
-  patternItem: {
-    flex: 1,
-    alignItems: \"center\",
-    justifyContent: \"flex-end\",
-  },
-  patternBar: {
-    width: \"80%\",
-    borderRadius: 4,
-    marginBottom: 6,
-  },
-  patternLabel: {
-    fontSize: 11,
-    color: colors.text.muted,
-    fontWeight: \"600\",
-  },
-  patternCount: {
-    fontSize: 10,
-    color: colors.text.dimmed,
-    marginTop: 2,
-  },
-  timeline: {
-    marginTop: 12,
-  },
+  patternItem: { flex: 1, alignItems: "center", justifyContent: "flex-end" },
+  patternBar: { width: "80%", borderRadius: 4, marginBottom: 6 },
+  patternLabel: { fontSize: 11, color: colors.text.muted, fontWeight: "600" },
+  patternCount: { fontSize: 10, color: colors.text.dimmed, marginTop: 2 },
+  timeline: { marginTop: 12 },
   timelineRow: {
-    flexDirection: \"row\",
-    alignItems: \"center\",
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 8,
-    position: \"relative\",
+    position: "relative",
   },
   timelineDot: {
     width: 24,
     height: 24,
     borderRadius: 12,
     borderWidth: 1,
-    alignItems: \"center\",
-    justifyContent: \"center\",
+    alignItems: "center",
+    justifyContent: "center",
     marginRight: 12,
   },
   timelineLine: {
-    position: \"absolute\",
+    position: "absolute",
     left: 11.5,
     top: 24,
     width: 1,
     height: 8,
-    backgroundColor: \"rgba(255,255,255,0.06)\",
+    backgroundColor: "rgba(255,255,255,0.06)",
   },
-  timelineDate: {
-    fontSize: 13,
-    color: colors.text.secondary,
-    flex: 1,
-  },
-  timelineType: {
-    fontSize: 12,
-    fontWeight: \"600\",
-  },
+  timelineDate: { fontSize: 13, color: colors.text.secondary, flex: 1 },
+  timelineType: { fontSize: 12, fontWeight: "600" },
 });
