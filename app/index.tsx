@@ -38,6 +38,7 @@ export default function App() {
     switchMountain,
     refreshProStatus,
   } = useMountainData();
+
   const [activeTab, setActiveTab] = useState<Tab>('home');
   const [showPaywall, setShowPaywall] = useState(false);
   const [addingNew, setAddingNew] = useState(false);
@@ -141,48 +142,59 @@ export default function App() {
           />
         );
       case 'stats':
-        return <AnalyticsScreen mountain={currentMountain} allMountains={allMountains} />;
+        return <AnalyticsScreen mountain={currentMountain} />;
       case 'trophies':
         return <TrophyRoom mountains={allMountains} />;
       default:
         // Home tab
         return (
-          <ScrollView contentContainerStyle={styles.scrollContent}>
+          <ScrollView
+            style={styles.content}
+            contentContainerStyle={styles.scrollContent}
+            showsVerticalScrollIndicator={false}
+          >
             <View style={styles.header}>
               <Text style={styles.habitName}>{currentMountain.habitName}</Text>
               <Text style={styles.dayCount}>
                 Day {currentMountain.cleanDays} of {TOTAL_DAYS}
               </Text>
             </View>
+
+            <Stars cleanDays={currentMountain.cleanDays} />
+
             <Mountain
               progress={currentMountain.cleanDays / TOTAL_DAYS}
-              themeId={currentMountain.themeId || 'classic'}
+              themeId={currentMountain.themeId}
             />
+
             <StatsRow mountain={currentMountain} />
+
             <ThemePicker
-              currentThemeId={currentMountain.themeId || 'classic'}
+              currentThemeId={currentMountain.themeId}
               isPro={proStatus}
               onSelect={async (themeId) => {
                 await updateMountain({ ...currentMountain, themeId });
               }}
               onUpgrade={() => setShowPaywall(true)}
             />
+
             <View style={styles.actions}>
               <TouchableOpacity
                 style={[styles.button, styles.cleanButton]}
                 onPress={handleCleanDay}
-                activeOpacity={0.85}
+                activeOpacity={0.8}
               >
                 <Text style={styles.buttonText}>✅ I stayed clean today</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.button, styles.relapseButton]}
                 onPress={handleRelapse}
-                activeOpacity={0.85}
+                activeOpacity={0.8}
               >
                 <Text style={styles.relapseText}>I relapsed</Text>
               </TouchableOpacity>
             </View>
+
             <ActivityLog log={currentMountain.log} />
           </ScrollView>
         );
@@ -191,8 +203,7 @@ export default function App() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Stars />
-      <View style={styles.content}>{renderContent()}</View>
+      {renderContent()}
       <TabBar
         activeTab={activeTab}
         onTabPress={handleTabPress}
@@ -201,7 +212,7 @@ export default function App() {
       {showPaywall && (
         <PaywallScreen
           onClose={() => setShowPaywall(false)}
-          onSuccess={() => {
+          onPurchased={() => {
             setShowPaywall(false);
             refreshProStatus();
           }}
