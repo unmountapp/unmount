@@ -18,10 +18,10 @@ import Animated, {
 import { colors } from "../utils/theme";
 
 interface SetupScreenProps {
-  onStart: (habit: string) => void;
+  onComplete: (habit: string) => void;
 }
 
-export function SetupScreen({ onStart }: SetupScreenProps) {
+export function SetupScreen({ onComplete }: SetupScreenProps) {
   const [habit, setHabit] = useState("");
   const fadeIn = useSharedValue(0);
   const slideUp = useSharedValue(30);
@@ -45,7 +45,7 @@ export function SetupScreen({ onStart }: SetupScreenProps) {
         <Text style={styles.emoji}>⛰️</Text>
         <Text style={styles.title}>UnMount</Text>
         <Text style={styles.subtitle}>
-          Your bad habit is a mountain. Chip away at it for 66 days and watch it
+          Your bad habit is a mountain. Chip away at it for 66 days and watch it{" "}
           crumble to nothing.
         </Text>
 
@@ -55,7 +55,7 @@ export function SetupScreen({ onStart }: SetupScreenProps) {
             style={styles.input}
             value={habit}
             onChangeText={setHabit}
-            onSubmitEditing={() => habit.trim() && onStart(habit.trim())}
+            onSubmitEditing={() => habit.trim() && onComplete(habit.trim())}
             placeholder="e.g. Late-night snacking"
             placeholderTextColor={colors.text.dimmed}
             maxLength={50}
@@ -65,22 +65,16 @@ export function SetupScreen({ onStart }: SetupScreenProps) {
           <TouchableOpacity
             style={[
               styles.button,
-              {
-                backgroundColor: habit.trim()
-                  ? colors.accent.green
-                  : "rgba(255,255,255,0.05)",
-              },
+              { backgroundColor: habit.trim() ? colors.accent.green : colors.surface },
             ]}
-            onPress={() => habit.trim() && onStart(habit.trim())}
+            onPress={() => habit.trim() && onComplete(habit.trim())}
             disabled={!habit.trim()}
             activeOpacity={0.8}
           >
             <Text
               style={[
                 styles.buttonText,
-                {
-                  color: habit.trim() ? colors.bg.primary : colors.text.dimmed,
-                },
+                { color: habit.trim() ? "#fff" : colors.text.muted },
               ]}
             >
               Begin the Climb
