@@ -2,7 +2,7 @@ import React from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { COLORS } from '../utils/theme';
 
-type Tab = 'home' | 'habits' | 'stats' | 'trophies';
+type Tab = 'home' | 'habits' | 'stats' | 'trophies' | 'settings';
 
 interface TabBarProps {
   activeTab: Tab;
