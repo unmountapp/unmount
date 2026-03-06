@@ -75,6 +75,8 @@ export interface MountainTheme {
 export interface AppSettings {
   remindersEnabled: boolean;
   reminderTime: string;
+    textColor: string;
+    textMode: 'light' | 'dark' | 'auto';
 }
 
 // ============================================================
@@ -299,9 +301,9 @@ export async function setProStatus(isPro: boolean): Promise<void> {
 export async function loadSettings(): Promise<AppSettings> {
   try {
     const json = await AsyncStorage.getItem(KEYS.settings);
-    return json ? JSON.parse(json) : { remindersEnabled: false, reminderTime: "09:00" };
+    return json ? JSON.parse(json) : { remindersEnabled: false, reminderTime: "09:00" , textColor: "#f1f5f9", textMode: "auto"};
   } catch {
-    return { remindersEnabled: false, reminderTime: "09:00" };
+    return { remindersEnabled: false, reminderTime: "09:00" , textColor: "#f1f5f9", textMode: "auto"};
   }
 }
 
