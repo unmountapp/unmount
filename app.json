@@ -2,7 +2,7 @@
   "expo": {
     "name": "UnMount",
     "slug": "unmount",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "unmount",
@@ -11,7 +11,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.unmount.app",
-      "buildNumber": "1"
+      "buildNumber": "2"
     },
     "android": {
       "adaptiveIcon": {
@@ -19,7 +19,8 @@
         "backgroundColor": "#1a1a2e"
       },
       "package": "com.unmount.app",
-      "versionCode": 1,
+      "versionCode": 2,
+      "targetSdkVersion": 35,
       "permissions": []
     },
     "web": {
