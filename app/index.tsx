@@ -21,11 +21,12 @@ import { TabBar } from '../components/TabBar';
 import { MountainSwitcher } from '../components/MountainSwitcher';
 import { AnalyticsScreen } from '../components/AnalyticsScreen';
 import { TrophyRoom } from '../components/TrophyRoom';
+import { SettingsScreen } from '../components/SettingsScreen';
 import { ThemePicker } from '../components/ThemePicker';
 import { COLORS } from '../utils/theme';
 import { TOTAL_DAYS } from './storage';
 
-type Tab = 'home' | 'habits' | 'stats' | 'trophies';
+type Tab = 'home' | 'habits' | 'stats' | 'trophies' | 'settings';
 
 export default function App() {
   const {
@@ -66,10 +67,12 @@ export default function App() {
   }
 
   const handleCleanDay = async () => {
+        if (!currentMountain) return;
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     const newCleanDays = currentMountain.cleanDays + 1;
     const newDaysRemaining = Math.max(0, currentMountain.daysRemaining - 1);
     const isNowVictory = newDaysRemaining <= 0;
+    
     const newStreak = currentMountain.currentStreak + 1;
     const updated = {
       ...currentMountain,
@@ -89,6 +92,7 @@ export default function App() {
   };
 
   const handleRelapse = () => {
+        if (!currentMountain) return;
     Alert.alert(
       'Log Relapse',
       'Are you sure? Your mountain will grow back a bit.',
@@ -148,6 +152,8 @@ export default function App() {
       default:
         // Home tab
         return (
+              case 'settings':
+      return <SettingsScreen />;
           <ScrollView
             style={styles.content}
             contentContainerStyle={styles.scrollContent}
