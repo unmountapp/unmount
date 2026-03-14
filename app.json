@@ -34,14 +34,14 @@
                                                           "kotlinVersion": "1.9.25"
                                                                     }
                                                                             }
-                                                                                  ]
-        {
+                                                                                  ],
+[        {
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#1a1a2e"
         }
-      ]
+              ]
     ],
     "experiments": {
       "typedRoutes": true
