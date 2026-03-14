@@ -20,7 +20,6 @@
       },
       "package": "com.unmount.app",
       "versionCode": 2,
-      "targetSdkVersion": 35,
       "permissions": []
     },
     "web": {
