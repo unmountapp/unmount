@@ -149,11 +149,10 @@ export default function App() {
         return <AnalyticsScreen mountain={currentMountain} />;
       case 'trophies':
         return <TrophyRoom mountains={allMountains} />;
-      default:
+    case 'settings':
+            return <SettingsScreen />;
+        default:
         // Home tab
-        return (
-              case 'settings':
-      return <SettingsScreen />;
           <ScrollView
             style={styles.content}
             contentContainerStyle={styles.scrollContent}
@@ -166,7 +165,7 @@ export default function App() {
               </Text>
             </View>
 
-            <Stars cleanDays={currentMountain.cleanDays} />
+
 
             <Mountain
               progress={currentMountain.cleanDays / TOTAL_DAYS}
@@ -203,7 +202,7 @@ export default function App() {
 
             <ActivityLog log={currentMountain.log} />
           </ScrollView>
-        );
+        
     }
   };
 
