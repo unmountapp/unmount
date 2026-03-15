@@ -1,51 +1,57 @@
 {
-  "expo": {
-    "name": "UnMount",
-    "slug": "unmount",
-    "version": "1.2.0",
-    "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "scheme": "unmount",
-    "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
-    "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.unmount.app",
-      "buildNumber": "3"
-    },
-    "android": {
-      "package": "com.unmount.app",
-      "versionCode": 3,
-      "permissions": []
-    },
-    "web": {
-      "bundler": "metro",
-      "output": "static",
-      "favicon": "./assets/images/favicon.png"
-    },
-    "plugins": [
-      "expo-router",
-"expo-splash-screen",
-      [
-                "expo-build-properties",
-                        {
-                                    "android": {
-                                                  "kotlinVersion": "1.9.25"
-                                                            }
-                                                                    }
-                    ]
-    ],
-    "experiments": {
-      "typedRoutes": true
-    },
-    "extra": {
-      "router": {
-        "origin": false
-      },
-      "eas": {
-        "projectId": "e50bf8a5-e3df-4f00-9dd4-f92ad8e6371e"
-      }
-    },
-    "owner": "unmountapp"
-  }
+    "expo": {
+          "name": "UnMount",
+          "slug": "unmount",
+          "version": "1.2.0",
+          "orientation": "portrait",
+          "icon": "./assets/images/icon.png",
+          "scheme": "unmount",
+          "userInterfaceStyle": "automatic",
+          "newArchEnabled": true,
+          "ios": {
+                  "supportsTablet": true,
+                  "bundleIdentifier": "com.unmount.app",
+                  "buildNumber": "3"
+          },
+          "android": {
+                  "package": "com.unmount.app",
+                  "versionCode": 3,
+                  "permissions": []
+          },
+          "web": {
+                  "bundler": "metro",
+                  "output": "static",
+                  "favicon": "./assets/images/favicon.png"
+          },
+          "plugins": [
+                  "expo-router",
+                  "expo-splash-screen",
+                  [
+                            "expo-build-properties",
+                            {
+                                        "android": {
+                                                      "kotlinVersion": "1.9.25",
+                                                      "compileSdkVersion": 35,
+                                                      "targetSdkVersion": 35,
+                                                      "buildToolsVersion": "35.0.0"
+                                        },
+                                        "ios": {
+                                                      "deploymentTarget": "15.1"
+                                        }
+                            }
+                  ]
+          ],
+          "experiments": {
+                  "typedRoutes": true
+          },
+          "extra": {
+                  "router": {
+                            "origin": false
+                  },
+                  "eas": {
+                            "projectId": "e50bf8a5-e3df-4f00-9dd4-f92ad8e6371e"
+                  }
+          },
+          "owner": "unmountapp"
+    }
 }
